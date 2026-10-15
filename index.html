@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CISETC 2027 Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="LLM-based assessment of fourth graders' integrated understanding of core life, metabolism and nutrition concepts. A proposed contribution to CISETC 2027, Santiago, Chile.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@1,8..60,500;1,8..60,600&display=swap">
+<style>
+/* Layout: lab-notebook grid — sticky section labels on a dotted instrument grid, one live concept-network diagram as the hero */
+:root{
+  --bg:#F3F6F5; --surface:#FFFFFF; --ink:#13201C; --muted:#56645F; --line:#D3DCD8; --grid:#C9D4D0;
+  --accent:#0E7C66; --accent-soft:#DAEEE8; --accent-ink:#FFFFFF;
+  --c-nut:#B0680F; --c-met:#0E7C66; --c-life:#4A52C4;
+  --sans:"IBM Plex Sans","Noto Sans TC",system-ui,sans-serif;
+  --serif:"Source Serif 4","Noto Sans TC",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --maxw:1160px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1513; --surface:#15201C; --ink:#E5EDEA; --muted:#98A6A0; --line:#28352F; --grid:#2C3A35;
+  --accent:#4CC3A5; --accent-soft:#173A31; --accent-ink:#0E1513; --c-nut:#E0A253; --c-met:#4CC3A5; --c-life:#959CF2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1513; --surface:#15201C; --ink:#E5EDEA; --muted:#98A6A0; --line:#28352F; --grid:#2C3A35;
+  --accent:#4CC3A5; --accent-soft:#173A31; --accent-ink:#0E1513; --c-nut:#E0A253; --c-met:#4CC3A5; --c-life:#959CF2; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+[data-lang="en"] .zh,[data-lang="zh"] .en{display:none!important}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:58px}
+.brand{font-family:var(--mono);font-size:13px;letter-spacing:.05em;text-decoration:none;display:flex;gap:10px;align-items:center;white-space:nowrap}
+.brand .mk{width:22px;height:22px;border-radius:6px;background:var(--ink);display:grid;place-items:center}
+.brand .mk i{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent)}
+.brand b{font-weight:500}
+.brand span{color:var(--muted)}
+nav.links{display:flex;gap:24px;font-size:14px}
+nav.links a{text-decoration:none;color:var(--muted);position:relative;padding-block:4px}
+nav.links a:hover,nav.links a.cur{color:var(--ink)}
+nav.links a.cur::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--accent);border-radius:2px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;font-family:var(--mono);font-size:12px;background:var(--surface)}
+.lang button{all:unset;cursor:pointer;padding:5px 11px;border-radius:999px;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+@media (max-width:880px){nav.links{display:none}.brand span{display:none}}
+
+/* type */
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,5.4vw,64px);line-height:1.04;letter-spacing:-.025em;font-weight:700}
+h1 em,h2 em{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);letter-spacing:-.01em}
+[data-lang="zh"] h1 em,[data-lang="zh"] h2 em{font-family:var(--sans);font-style:normal;font-weight:700}
+h2{font-size:clamp(28px,3.6vw,42px);line-height:1.1;letter-spacing:-.02em;font-weight:700}
+h3{font-size:20px;line-height:1.3;font-weight:600;letter-spacing:-.01em}
+[data-lang="zh"] h1,[data-lang="zh"] h2{letter-spacing:0}
+p{margin:0}
+.lede{font-size:clamp(17px,1.7vw,19px);color:var(--muted);max-width:62ch}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+#field{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;padding-block:clamp(44px,7vw,92px) clamp(40px,6vw,72px)}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(28px,5vw,64px);align-items:center}
+.hero-grid>*{min-width:0}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted)}
+.badge i{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.hero h1{margin-top:22px}
+.study-title{margin-top:30px;padding:18px 20px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px 10px 10px 4px;background:var(--surface);display:grid;gap:6px}
+.study-title p.t{font-size:clamp(17px,1.8vw,20px);line-height:1.4;font-weight:500}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:24px;font-size:14px;color:var(--muted)}
+.meta-row span{display:inline-flex;gap:8px;align-items:center}
+.meta-row svg.i{width:17px;height:17px;color:var(--accent)}
+.meta-row strong{color:var(--ink);font-weight:600}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
+
+/* concept network */
+.net{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 0 var(--line),0 24px 48px -32px color-mix(in srgb,var(--ink) 40%,transparent)}
+.net-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 4px 8px;border-bottom:1px dashed var(--line)}
+.net-head .dots{display:flex;gap:5px}
+.net-head .dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.net svg{width:100%;height:auto;display:block}
+.net .edge{stroke:var(--grid);stroke-width:1.4;fill:none}
+.net .edge.flow{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:3 7;animation:flow 1.4s linear infinite;opacity:.9}
+@keyframes flow{to{stroke-dashoffset:-20}}
+.net .cnode{cursor:pointer}
+.net .cnode circle.ring{fill:var(--surface);stroke:var(--k);stroke-width:1.6;transition:r .3s}
+.net .cnode circle.core{fill:var(--k)}
+.net .cnode circle.halo{fill:var(--k);opacity:.12}
+.net .cnode text{fill:var(--ink);font-family:var(--sans);font-size:13px;font-weight:600;text-anchor:middle}
+.net .cnode text.sub{fill:var(--muted);font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.06em}
+.net .cnode.dim{opacity:.3}
+.net .hub circle{fill:var(--ink)}
+.net .hub text{fill:var(--bg);font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-anchor:middle}
+.net .io text{fill:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.06em}
+.net .io rect{fill:var(--bg);stroke:var(--line)}
+.net .pulse{fill:var(--accent)}
+.k-nut{--k:var(--c-nut)} .k-met{--k:var(--c-met)} .k-life{--k:var(--c-life)}
+.net-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:11px;color:var(--muted)}
+.net-foot b{color:var(--accent);font-weight:500}
+
+/* figures strip */
+.figs{border-bottom:1px solid var(--line);background:var(--surface)}
+.figs .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
+.fig{padding:22px 18px;border-left:1px solid var(--line);display:grid;gap:2px;min-width:0}
+.fig:first-child{border-left:0;padding-left:0}
+.fig .v{font-size:clamp(26px,3vw,36px);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.fig .v small{font-size:.5em;font-weight:500;color:var(--muted);margin-left:4px}
+.fig .l{font-size:13px;color:var(--muted)}
+@media (max-width:820px){.figs .wrap{grid-template-columns:repeat(2,1fr)}.fig{border-left:0;border-top:1px solid var(--line);padding:16px 0}.fig:nth-child(-n+2){border-top:0}.fig:nth-child(even){padding-left:16px;border-left:1px solid var(--line)}.fig:last-child{grid-column:1/-1;padding-left:0;border-left:0}}
+
+/* sections */
+section.s{padding-block:clamp(60px,8vw,104px);position:relative}
+section.s+section.s{border-top:1px solid var(--line)}
+.s-grid{display:grid;grid-template-columns:210px 1fr;gap:clamp(20px,4vw,56px)}
+.s-grid>*{min-width:0}
+.s-label{position:sticky;top:90px;align-self:start;display:grid;gap:10px}
+.s-label .n{font-family:var(--mono);font-size:12px;color:var(--accent);display:flex;align-items:center;gap:10px}
+.s-label .n::after{content:"";height:1px;width:40px;background:var(--accent)}
+@media (max-width:820px){.s-grid{grid-template-columns:1fr}.s-label{position:static}}
+
+/* study spec */
+.spec{margin-top:32px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.spec-row{display:grid;grid-template-columns:200px 1fr;border-top:1px solid var(--line)}
+.spec-row:first-child{border-top:0}
+.spec-row>div{padding:16px 20px;min-width:0}
+.spec-row .k{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--bg) 60%,var(--surface))}
+.spec-row .k svg.i{width:18px;height:18px;color:var(--accent)}
+.spec-row .v{font-size:16px;font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--k) 45%,var(--line));font-size:14px;font-weight:500;cursor:default;transition:background .2s}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--k)}
+.tag:hover{background:color-mix(in srgb,var(--k) 12%,transparent)}
+@media (max-width:600px){.spec-row{grid-template-columns:1fr}.spec-row .k{padding-bottom:8px;background:none}.spec-row .v{padding-top:0}}
+
+/* axes */
+.axes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;margin-top:36px}
+@media (max-width:820px){.axes{grid-template-columns:1fr}}
+.map svg.i{width:28px;height:28px}
+.axes svg.map{width:100%;height:auto;max-width:440px;display:block;margin:0 auto}
+.map .orbit{fill:none;stroke:var(--grid);stroke-dasharray:2 6}
+.map .edge{stroke:var(--line);stroke-width:1.5;fill:none;transition:stroke .3s}
+.map .edge.on{stroke:var(--accent);stroke-dasharray:4 6;animation:flow 1.2s linear infinite}
+.map .node{cursor:pointer;color:var(--muted)}
+.map .node circle{fill:var(--surface);stroke:var(--line);stroke-width:1.5;transition:fill .3s,stroke .3s}
+.map .node.on{color:var(--accent-ink)}
+.map .node.on circle{fill:var(--accent);stroke:var(--accent)}
+.map .node:hover circle{stroke:var(--accent)}
+.map .core circle{fill:var(--ink)}
+.map .core text{fill:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-anchor:middle}
+.map .lbl{fill:var(--muted);font-family:var(--sans);font-size:13px;font-weight:500;text-anchor:middle;transition:fill .3s}
+.map .lbl.on{fill:var(--ink)}
+.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:22px}
+.tab{all:unset;cursor:pointer;font-size:14px;font-weight:500;padding:10px 12px;border:1px solid var(--line);border-radius:10px;color:var(--muted);display:flex;gap:10px;align-items:center;background:var(--surface);position:relative;overflow:hidden}
+.tab svg.i{width:18px;height:18px}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.tab[aria-selected="true"] svg.i{color:var(--accent)}
+.tab .bar{position:absolute;left:0;bottom:0;height:2px;background:var(--accent);width:0}
+.tab[aria-selected="true"] .bar.run{animation:fill 6s linear forwards}
+@keyframes fill{to{width:100%}}
+.panel{display:grid;gap:12px;min-height:150px}
+.panel .num{font-family:var(--mono);font-size:56px;line-height:1;color:var(--grid);font-weight:500}
+.panel h3{font-size:clamp(24px,2.6vw,30px);font-weight:700}
+.panel p{font-size:18px;color:var(--muted);max-width:42ch}
+.panel.swap{animation:swap .45s ease}
+@keyframes swap{from{opacity:0;transform:translateY(8px)}}
+
+/* alignment */
+blockquote.align{margin:0;font-size:clamp(22px,2.7vw,32px);line-height:1.38;font-weight:500;letter-spacing:-.01em;max-width:32ch}
+blockquote.align mark{background:linear-gradient(var(--accent-soft),var(--accent-soft)) no-repeat 0 88%/0% 38%;color:inherit;padding:0 2px;transition:background-size 1s cubic-bezier(.2,.7,.2,1)}
+blockquote.align.lit mark{background-size:100% 38%}
+blockquote.align mark:nth-of-type(2){transition-delay:.25s}
+blockquote.align mark:nth-of-type(3){transition-delay:.5s}
+.align-sub{margin-top:22px;color:var(--muted);max-width:64ch;font-size:17px}
+.outcomes{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.out{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--surface);display:grid;gap:10px;align-content:start;transition:transform .25s,border-color .25s}
+.out:hover{transform:translateY(-3px);border-color:var(--accent)}
+.out .ic{width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.out b{font-size:17px;font-weight:600}
+@media (max-width:760px){.outcomes{grid-template-columns:1fr}}
+
+/* timeline */
+.steps{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
+.steps::before,.steps .fillline{content:"";position:absolute;top:31px;left:32px;right:calc(33.33% - 32px);height:2px;background:var(--line)}
+.steps .fillline{background:var(--accent);transform-origin:left;transform:scaleX(var(--p,1));transition:transform 1.6s cubic-bezier(.3,.6,.2,1)}
+.step{position:relative;padding-right:24px;display:grid;gap:10px;align-content:start}
+.step .ico{width:64px;height:64px;border-radius:16px;background:var(--surface);border:1.5px solid var(--line);display:grid;place-items:center;color:var(--muted);position:relative;z-index:1;transition:all .5s}
+.step .ico svg.i{width:28px;height:28px}
+.step.lit .ico{border-color:var(--accent);color:var(--accent)}
+.step.final.lit .ico{background:var(--accent);color:var(--accent-ink)}
+.step .when{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);margin-top:8px}
+.step b{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.step .kind{font-size:13px;color:var(--muted)}
+.ruler{margin-top:44px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:18px 18px 14px}
+.ruler-head{display:grid;grid-template-columns:repeat(9,1fr);text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:12px}
+.months{display:grid;grid-template-columns:repeat(9,1fr);font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center}
+.months span.yr{color:var(--ink);font-weight:500}
+.bars{position:relative;height:36px;margin-top:8px;display:grid;grid-template-columns:repeat(9,1fr)}
+.bars>i{border-left:1px dashed var(--line)}
+.bars>i:first-child{border-left:0}
+.band{position:absolute;top:8px;height:20px;left:0;width:calc(100%/9*4);border-radius:6px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;padding:0 8px;font-size:11px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden}
+.flag{position:absolute;top:2px;width:2px;height:32px;background:var(--ink);transform:translateX(-1px)}
+.flag::after{content:"";position:absolute;top:-4px;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.flag.acc{background:var(--accent)}.flag.acc::after{background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+@media (max-width:760px){
+  .steps{grid-template-columns:1fr;gap:28px}
+  .steps::before,.steps .fillline{display:none}
+  .step:not(.final)::after{content:"";position:absolute;left:31px;top:64px;height:calc(100% - 64px + 28px);width:2px;background:var(--line);transition:background .5s}
+  .step.lit:not(.final)::after{background:var(--accent)}
+  .step{grid-template-columns:64px 1fr;column-gap:18px;padding-right:0}
+  .step .ico{grid-row:span 4}
+  .step .when{margin-top:2px}
+}
+
+/* venue */
+.venue{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:end}
+.venue>*{min-width:0}
+@media (max-width:760px){.venue{grid-template-columns:1fr}}
+.coords{font-family:var(--mono);font-size:13px;color:var(--muted);display:grid;gap:6px}
+.coords span{display:flex;gap:10px;align-items:center}
+.coords svg.i{width:16px;height:16px;color:var(--accent)}
+.ridge{width:100%;display:block}
+
+footer{border-top:1px solid var(--line);padding-block:28px 40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* reveal: visible at rest, lift only for blocks below the fold */
+.rv{transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .8s}
+.rv.pre{transform:translateY(18px);opacity:.4}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7.5 14h9"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9.5 14.5 12 12l2.5 2.5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/><circle cx="12" cy="12" r="2.2"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h11a1.5 1.5 0 0 1 1.5 1.5V13a1.5 1.5 0 0 1-1.5 1.5H9L5.5 17.5v-3H4A1.5 1.5 0 0 1 2.5 13V6.5A1.5 1.5 0 0 1 4 5z"/><path d="M16.5 9H20a1.5 1.5 0 0 1 1.5 1.5V16a1.5 1.5 0 0 1-1.5 1.5h-1V20l-3-2.5h-4"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9.5 9.5h5v5h-5zM9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M10 14.5V5a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0z"/><path d="M12 9v7"/><path d="M17.5 6.5h3M17.5 10h3"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.3 11 15.7 7M8.3 13l7.4 4"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 2.5 8 12 13l9.5-5z"/><path d="m2.5 12.5 9.5 5 9.5-5M2.5 16.5l9.5 5 9.5-5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18 14.8c1.9.7 3 2.5 3 5.2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mk"><i></i></span><b>CISETC 2027</b><span>/ Santiago, Chile</span></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#study"><span class="en">Study</span><span class="zh">研究</span></a>
+      <a href="#axes"><span class="en">Thematic axes</span><span class="zh">主題軸向</span></a>
+      <a href="#alignment"><span class="en">Alignment</span><span class="zh">契合度</span></a>
+      <a href="#timeline"><span class="en">Timeline</span><span class="zh">時程</span></a>
+      <a href="#venue"><span class="en">Venue</span><span class="zh">地點</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-en" type="button" data-set="en" aria-pressed="true">EN</button>
+      <button id="lang-zh" type="button" data-set="zh" aria-pressed="false">中文</button>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="badge"><i></i><span class="en">Proposed contribution · CISETC 2027</span><span class="zh">投稿提案 · CISETC 2027</span></span>
+        <h1><span class="en">The International Congress on Education and Technology in <em>Sciences</em></span><span class="zh">國際科學教育與<em>科技</em>研討會</span></h1>
+        <div class="study-title">
+          <span class="eyebrow"><span class="en">Proposed study</span><span class="zh">研究題目</span></span>
+          <p class="t"><span class="en">LLM-based Assessment Reveals Fourth Graders’ Integrated Grasp of Core Life, Metabolism, and Nutrition Concepts</span><span class="zh">以大型語言模型評量揭示國小四年級學生對生命、代謝與營養核心概念的整合理解</span></p>
+        </div>
+        <div class="meta-row">
+          <span><svg class="i"><use href="#i-pin"/></svg><strong><span class="en">Santiago, Chile</span><span class="zh">智利 聖地牙哥</span></strong></span>
+          <span><svg class="i"><use href="#i-send"/></svg><span class="en">Submission</span><span class="zh">投稿</span> <strong>Mar 2027</strong></span>
+          <span><svg class="i"><use href="#i-cal"/></svg><span class="en">Conference</span><span class="zh">會議</span> <strong>Aug 2027</strong></span>
+        </div>
+      </div>
+
+      <figure class="net" id="net" style="margin:0" aria-label="Concept network: student reasoning analysed by chain-of-thought into core life, metabolism and nutrition, integrated into one understanding">
+        <div class="net-head"><span class="dots"><i></i><i></i><i></i></span><span class="eyebrow">CoT · CONCEPT INTEGRATION</span></div>
+        <svg viewBox="0 0 400 330" role="img" aria-hidden="true">
+          <defs>
+            <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="var(--grid)"/></pattern>
+          </defs>
+          <rect x="0" y="0" width="400" height="330" fill="url(#dots)" opacity=".7"/>
+          <!-- input -->
+          <g class="io"><rect x="132" y="14" width="136" height="26" rx="13"/><text x="200" y="31" text-anchor="middle">STUDENT REASONING</text></g>
+          <path class="edge flow" id="p-in" d="M200 40 V 74"/>
+          <g class="io"><rect x="148" y="74" width="104" height="26" rx="6"/><text x="200" y="91" text-anchor="middle">LLM · CoT</text></g>
+          <!-- to concepts -->
+          <path class="edge" id="p-l" d="M180 100 C 150 130, 110 140, 92 168"/>
+          <path class="edge" id="p-m" d="M200 100 V 150"/>
+          <path class="edge" id="p-n" d="M220 100 C 250 130, 290 140, 308 168"/>
+          <!-- integration triangle -->
+          <path class="edge" id="e-lm" d="M92 196 Q 140 230 186 248"/>
+          <path class="edge" id="e-mn" d="M214 248 Q 260 230 308 196"/>
+          <path class="edge" id="e-ln" d="M106 186 Q 200 150 294 186"/>
+          <path class="edge flow" d="M200 196 V 228"/>
+          <!-- concept nodes -->
+          <g class="cnode k-life" data-k="life" tabindex="0"><circle class="halo" cx="92" cy="182" r="26"/><circle class="ring" cx="92" cy="182" r="15"/><circle class="core" cx="92" cy="182" r="5"/><text x="92" y="226">Core Life</text><text class="sub" x="92" y="240">生命</text></g>
+          <g class="cnode k-met" data-k="met" tabindex="0"><circle class="halo" cx="200" cy="168" r="26"/><circle class="ring" cx="200" cy="168" r="15"/><circle class="core" cx="200" cy="168" r="5"/><text x="246" y="152" style="text-anchor:start">Metabolism</text><text class="sub" x="246" y="166" style="text-anchor:start">代謝</text></g>
+          <g class="cnode k-nut" data-k="nut" tabindex="0"><circle class="halo" cx="308" cy="182" r="26"/><circle class="ring" cx="308" cy="182" r="15"/><circle class="core" cx="308" cy="182" r="5"/><text x="308" y="226">Nutrition</text><text class="sub" x="308" y="240">營養</text></g>
+          <!-- hub -->
+          <g class="hub"><circle cx="200" cy="262" r="34"/><text x="200" y="258">INTEGRATED</text><text x="200" y="272">GRASP</text></g>
+          <g class="io"><text x="200" y="318" text-anchor="middle">→ EVIDENCE OF LEARNING</text></g>
+          <!-- pulses -->
+          <circle class="pulse" r="3.2"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#p-l"/></animateMotion></circle>
+          <circle class="pulse" r="3.2"><animateMotion dur="2.4s" begin=".8s" repeatCount="indefinite"><mpath href="#p-m"/></animateMotion></circle>
+          <circle class="pulse" r="3.2"><animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite"><mpath href="#p-n"/></animateMotion></circle>
+          <circle class="pulse" r="2.6" opacity=".7"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#e-ln"/></animateMotion></circle>
+          <circle class="pulse" r="2.6" opacity=".7"><animateMotion dur="3.2s" begin="1s" repeatCount="indefinite"><mpath href="#e-lm"/></animateMotion></circle>
+          <circle class="pulse" r="2.6" opacity=".7"><animateMotion dur="3.2s" begin="2s" repeatCount="indefinite"><mpath href="#e-mn"/></animateMotion></circle>
+        </svg>
+        <div class="net-foot"><span>GRADE 4 · LIFE SCIENCE</span><span><span class="en">Hover a concept</span><span class="zh">滑過概念查看連結</span> <b>●</b></span></div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- KEY FIGURES -->
+  <div class="figs">
+    <div class="wrap">
+      <div class="fig"><span class="v" data-count="4">4</span><span class="l"><span class="en">Thematic axes</span><span class="zh">會議主題軸向</span></span></div>
+      <div class="fig"><span class="v" data-count="3">3</span><span class="l"><span class="en">Core concepts</span><span class="zh">核心概念</span></span></div>
+      <div class="fig"><span class="v"><span class="en">4<small>th</small></span><span class="zh">四<small>年級</small></span></span><span class="l"><span class="en">Grade, primary school</span><span class="zh">國小學生</span></span></div>
+      <div class="fig"><span class="v">03<small>/2027</small></span><span class="l"><span class="en">Paper submission</span><span class="zh">論文投稿</span></span></div>
+      <div class="fig"><span class="v">08<small>/2027</small></span><span class="l"><span class="en">Conference, Santiago</span><span class="zh">研討會，聖地牙哥</span></span></div>
+    </div>
+  </div>
+
+  <!-- STUDY -->
+  <section class="s" id="study">
+    <div class="wrap s-grid">
+      <div class="s-label rv"><span class="n">01</span><h2><span class="en">One-page <em>summary</em></span><span class="zh">研究<em>概要</em></span></h2></div>
+      <div>
+        <p class="lede rv" style="color:var(--ink);font-size:clamp(19px,2vw,23px);line-height:1.5;font-weight:500"><span class="en">This presentation outlines a proposed contribution to CISETC 2027 in Santiago, Chile, focused on how LLM-based assessment can reveal primary students’ integrated understanding of life science concepts.</span><span class="zh">本簡報提出一項預計於智利聖地牙哥 CISETC 2027 發表的研究，聚焦於以大型語言模型（LLM）為基礎的評量，如何揭示國小學生對生命科學概念的整合理解。</span></p>
+        <div class="spec rv">
+          <div class="spec-row"><div class="k"><svg class="i"><use href="#i-chip"/></svg><span class="en">Method</span><span class="zh">方法</span></div><div class="v"><span class="en">LLM-based assessment</span><span class="zh">以大型語言模型為基礎的評量</span></div></div>
+          <div class="spec-row"><div class="k"><svg class="i"><use href="#i-users"/></svg><span class="en">Participants</span><span class="zh">對象</span></div><div class="v"><span class="en">Fourth graders, primary school</span><span class="zh">國小四年級學生</span></div></div>
+          <div class="spec-row"><div class="k"><svg class="i"><use href="#i-book"/></svg><span class="en">Domain</span><span class="zh">領域</span></div><div class="v"><span class="en">Life science</span><span class="zh">生命科學</span></div></div>
+          <div class="spec-row"><div class="k"><svg class="i"><use href="#i-layers"/></svg><span class="en">Concepts</span><span class="zh">核心概念</span></div><div class="v"><div class="tags"><span class="tag k-life"><i></i><span class="en">Core Life</span><span class="zh">生命</span></span><span class="tag k-met"><i></i><span class="en">Metabolism</span><span class="zh">代謝</span></span><span class="tag k-nut"><i></i><span class="en">Nutrition</span><span class="zh">營養</span></span></div></div></div>
+          <div class="spec-row"><div class="k"><svg class="i"><use href="#i-target"/></svg><span class="en">Focus</span><span class="zh">焦點</span></div><div class="v"><span class="en">Integrated understanding across concepts</span><span class="zh">跨概念的整合理解</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AXES -->
+  <section class="s" id="axes">
+    <div class="wrap s-grid">
+      <div class="s-label rv"><span class="n">02</span><h2><span class="en">Conference <em>thematic axes</em></span><span class="zh">會議<em>主題軸向</em></span></h2></div>
+      <div>
+        <p class="lede rv"><span class="en">CISETC 2027 is organised around four thematic axes.</span><span class="zh">本會議涵蓋以下四個主要主題面向。</span></p>
+        <div class="axes rv">
+          <svg class="map" viewBox="0 0 440 400" role="img" aria-label="Four thematic axes around the study">
+            <circle class="orbit" cx="220" cy="196" r="150"/>
+            <circle class="orbit" cx="220" cy="196" r="92"/>
+            <path class="edge" data-e="0" d="M220 196 L104 80"/>
+            <path class="edge" data-e="1" d="M220 196 L336 80"/>
+            <path class="edge" data-e="2" d="M220 196 L336 312"/>
+            <path class="edge" data-e="3" d="M220 196 L104 312"/>
+            <g class="core"><circle cx="220" cy="196" r="44"/><text x="220" y="192">CISETC</text><text x="220" y="207">2027</text></g>
+            <g class="node" data-a="0"><circle cx="104" cy="80" r="28"/><svg x="90" y="66" width="28" height="28" class="i"><use href="#i-loop"/></svg></g>
+            <text class="lbl" data-l="0" x="104" y="130">Metacognition</text>
+            <g class="node" data-a="1"><circle cx="336" cy="80" r="28"/><svg x="322" y="66" width="28" height="28" class="i"><use href="#i-chat"/></svg></g>
+            <text class="lbl" data-l="1" x="336" y="130">Dialogic Intelligence</text>
+            <g class="node" data-a="2"><circle cx="336" cy="312" r="28"/><svg x="322" y="298" width="28" height="28" class="i"><use href="#i-chip"/></svg></g>
+            <text class="lbl" data-l="2" x="336" y="362">Artificial Intelligence</text>
+            <g class="node" data-a="3"><circle cx="104" cy="312" r="28"/><svg x="90" y="298" width="28" height="28" class="i"><use href="#i-temp"/></svg></g>
+            <text class="lbl" data-l="3" x="104" y="362">Climate Change</text>
+          </svg>
+          <div>
+            <div class="tabs" role="tablist" aria-label="Thematic axes">
+              <button class="tab" role="tab" id="tab-0" data-a="0" aria-selected="true" type="button"><svg class="i"><use href="#i-loop"/></svg><span class="en">Metacognition</span><span class="zh">後設認知</span><i class="bar"></i></button>
+              <button class="tab" role="tab" id="tab-1" data-a="1" aria-selected="false" type="button"><svg class="i"><use href="#i-chat"/></svg><span class="en">Dialogic</span><span class="zh">對話智慧</span><i class="bar"></i></button>
+              <button class="tab" role="tab" id="tab-2" data-a="2" aria-selected="false" type="button"><svg class="i"><use href="#i-chip"/></svg><span class="en">AI</span><span class="zh">人工智慧</span><i class="bar"></i></button>
+              <button class="tab" role="tab" id="tab-3" data-a="3" aria-selected="false" type="button"><svg class="i"><use href="#i-temp"/></svg><span class="en">Climate</span><span class="zh">氣候變遷</span><i class="bar"></i></button>
+            </div>
+            <div class="panel" role="tabpanel" aria-live="polite" id="panel"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALIGNMENT -->
+  <section class="s" id="alignment">
+    <div class="wrap s-grid">
+      <div class="s-label rv"><span class="n">03</span><h2><span class="en">Key <em>alignment</em></span><span class="zh">核心<em>契合</em></span></h2></div>
+      <div>
+        <blockquote class="align" id="quote"><span class="en">Generative AI and LLM-informed assessment can make <mark>student reasoning visible</mark>, support <mark>concept integration</mark>, and provide <mark>richer evidence of learning</mark>.</span><span class="zh">生成式 AI 與 LLM 輔助評量，能讓<mark>學生的推理被看見</mark>、支持<mark>概念整合</mark>，並提供<mark>更豐富的學習證據</mark>。</span></blockquote>
+        <p class="align-sub rv"><span class="en">The proposed research aligns strongly with the conference focus on metacognition, dialogic intelligence, artificial intelligence, and climate-related computational thinking.</span><span class="zh">本研究與會議所關注的後設認知、對話智慧、人工智慧，以及氣候相關的計算思維高度契合。</span></p>
+        <div class="outcomes rv">
+          <div class="out"><span class="ic"><svg class="i"><use href="#i-eye"/></svg></span><b><span class="en">Reasoning made visible</span><span class="zh">推理可視化</span></b></div>
+          <div class="out"><span class="ic"><svg class="i"><use href="#i-link"/></svg></span><b><span class="en">Concept integration</span><span class="zh">概念整合</span></b></div>
+          <div class="out"><span class="ic"><svg class="i"><use href="#i-layers"/></svg></span><b><span class="en">Richer evidence of learning</span><span class="zh">更豐富的學習證據</span></b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="s" id="timeline">
+    <div class="wrap s-grid">
+      <div class="s-label rv"><span class="n">04</span><h2><span class="en">Road to <em>Santiago</em></span><span class="zh">前進<em>聖地牙哥</em></span></h2></div>
+      <div>
+        <div class="steps" id="steps">
+          <i class="fillline" aria-hidden="true"></i>
+          <div class="step"><span class="ico"><svg class="i"><use href="#i-flask"/></svg></span><span class="when">DEC 2026 – MAR 2027</span><b><span class="en">Preparation</span><span class="zh">準備期</span></b><span class="kind"><span class="en">4 months</span><span class="zh">為期 4 個月</span></span></div>
+          <div class="step"><span class="ico"><svg class="i"><use href="#i-send"/></svg></span><span class="when">MAR 2027</span><b><span class="en">Paper submission</span><span class="zh">論文投稿</span></b><span class="kind"><span class="en">Milestone</span><span class="zh">里程碑</span></span></div>
+          <div class="step final"><span class="ico"><svg class="i"><use href="#i-globe"/></svg></span><span class="when">AUG 2027</span><b><span class="en">Conference</span><span class="zh">研討會</span></b><span class="kind"><span class="en">Santiago, Chile</span><span class="zh">智利 聖地牙哥</span></span></div>
+        </div>
+        <div class="ruler rv" aria-hidden="true">
+          <div class="ruler-head"><span>2026</span><span>2027 →</span></div>
+          <div class="months"><span>DEC</span><span class="yr">JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>JUL</span><span>AUG</span></div>
+          <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <span class="band"><span class="en">Preparation</span><span class="zh">準備期</span></span>
+            <span class="flag" style="left:calc(100%/9*3.5)"></span>
+            <span class="flag acc" style="left:calc(100%/9*8.5)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VENUE -->
+  <section class="s" id="venue">
+    <div class="wrap s-grid">
+      <div class="s-label rv"><span class="n">05</span><h2><span class="en"><em>Venue</em></span><span class="zh">會議<em>地點</em></span></h2></div>
+      <div class="venue">
+        <div class="rv" style="display:grid;gap:16px">
+          <h3 style="font-size:clamp(28px,3.2vw,38px);font-weight:700;letter-spacing:-.02em"><span class="en">Santiago, Chile</span><span class="zh">智利 聖地牙哥</span></h3>
+          <div class="coords">
+            <span><svg class="i"><use href="#i-pin"/></svg>33.4489° S, 70.6693° W</span>
+            <span><svg class="i"><use href="#i-clock"/></svg>CLT · UTC−4</span>
+            <span><svg class="i"><use href="#i-cal"/></svg>CISETC 2027 · AUG 2027</span>
+          </div>
+        </div>
+        <canvas class="ridge" id="ridge" aria-hidden="true"></canvas>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>CISETC 2027 · Santiago, Chile</span><span>LLM-based Assessment · Grade 4 Life Science</span></div>
+</footer>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css=n=>getComputedStyle(root).getPropertyValue(n).trim();
+
+  /* language */
+  function setLang(l){
+    root.setAttribute('data-lang',l);root.lang=l==='zh'?'zh-Hant':'en';
+    document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.set===l));
+    try{localStorage.setItem('cisetc-lang',l)}catch(e){}
+    renderPanel(false);
+  }
+  let saved='en';try{saved=localStorage.getItem('cisetc-lang')||'en'}catch(e){}
+  root.setAttribute('data-lang',saved);
+  document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.set)));
+
+  /* scroll progress + active nav */
+  const prog=document.getElementById('progress');
+  const navs=[...document.querySelectorAll('nav.links a')];
+  function onScroll(){
+    const h=document.documentElement.scrollHeight-innerHeight;
+    prog.style.transform='scaleX('+(h>0?scrollY/h:0)+')';
+    let cur=null;navs.forEach(a=>{const s=document.querySelector(a.getAttribute('href'));if(s&&s.getBoundingClientRect().top<140)cur=a});
+    navs.forEach(a=>a.classList.toggle('cur',a===cur));
+  }
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* hero field: dot grid that brightens near the pointer */
+  const field=document.getElementById('field'),hero=field.parentElement;
+  let mx=-999,my=-999;
+  function drawField(){
+    const dpr=devicePixelRatio||1,w=hero.clientWidth,h=hero.clientHeight;
+    if(field.width!==w*dpr||field.height!==h*dpr){field.width=w*dpr;field.height=h*dpr}
+    const c=field.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    const g=css('--grid'),a=css('--accent'),step=22;
+    for(let x=step/2;x<w;x+=step)for(let y=step/2;y<h;y+=step){
+      const d=Math.hypot(x-mx,y-my),t=Math.max(0,1-d/170);
+      c.fillStyle=t>0?a:g;c.globalAlpha=t>0?.25+t*.75:.55;
+      c.beginPath();c.arc(x,y,1+t*1.4,0,7);c.fill();
+    }
+    c.globalAlpha=1;
+  }
+  let raf=0;const req=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;drawField()})};
+  if(matchMedia('(hover:hover)').matches&&!reduce){
+    hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;req()});
+    hero.addEventListener('pointerleave',()=>{mx=my=-999;req()});
+  }
+  addEventListener('resize',req);drawField();
+
+  /* concept network hover */
+  const net=document.getElementById('net');
+  const nodes=[...net.querySelectorAll('.cnode')];
+  const linkMap={life:['p-l','e-lm','e-ln'],met:['p-m','e-lm','e-mn'],nut:['p-n','e-mn','e-ln']};
+  function focus(k){
+    nodes.forEach(n=>n.classList.toggle('dim',k&&n.dataset.k!==k));
+    net.querySelectorAll('path.edge[id]').forEach(p=>{if(p.id!=='p-in')p.classList.toggle('flow',!!k&&linkMap[k].includes(p.id))});
+  }
+  nodes.forEach(n=>{
+    n.addEventListener('pointerenter',()=>focus(n.dataset.k));
+    n.addEventListener('pointerleave',()=>focus(null));
+    n.addEventListener('focus',()=>focus(n.dataset.k));
+    n.addEventListener('blur',()=>focus(null));
+    n.addEventListener('click',()=>focus(n.dataset.k));
+  });
+  if(reduce)net.querySelectorAll('animateMotion').forEach(a=>a.parentNode.remove());
+
+  /* axes */
+  const AX=[
+    {en:['Metacognition','Exploration of learners’ internal voice and reflective thinking.'],zh:['後設認知','探索學習者的內在心聲與反思性思維。']},
+    {en:['Dialogic Intelligence','Problem-posing as a pathway to deeper learning and inquiry.'],zh:['對話智慧','將「提出問題」作為深入學習與探究的途徑。']},
+    {en:['Artificial Intelligence','Use of Chain-of-Thought (CoT) approaches for reasoning and assessment.'],zh:['人工智慧','運用思維鏈（Chain-of-Thought, CoT）方法進行推理與評量。']},
+    {en:['Climate Change','Application of computational models to support understanding and analysis.'],zh:['氣候變遷','應用計算模型以支援理解與分析。']}
+  ];
+  let cur=0,auto=!reduce,timer=null,axesVisible=false;
+  const panel=document.getElementById('panel');
+  function renderPanel(anim){
+    const l=root.getAttribute('data-lang')==='zh'?'zh':'en',a=AX[cur][l];
+    panel.innerHTML=`<span class="num">0${cur+1}</span><h3>${a[0]}</h3><p>${a[1]}</p>`;
+    if(anim){panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap')}
+  }
+  function select(i,anim=true){
+    cur=i;
+    document.querySelectorAll('.tab').forEach(t=>{const on=+t.dataset.a===i;t.setAttribute('aria-selected',on);const b=t.querySelector('.bar');b.classList.remove('run');if(on&&auto&&axesVisible){void b.offsetWidth;b.classList.add('run')}});
+    document.querySelectorAll('.map .node').forEach(n=>n.classList.toggle('on',+n.dataset.a===i));
+    document.querySelectorAll('.map .edge').forEach(e=>e.classList.toggle('on',+e.dataset.e===i));
+    document.querySelectorAll('.map .lbl').forEach(e=>e.classList.toggle('on',+e.dataset.l===i));
+    renderPanel(anim);
+    clearTimeout(timer);if(auto&&axesVisible)timer=setTimeout(()=>select((cur+1)%4),6000);
+  }
+  function stopAuto(){auto=false;clearTimeout(timer);document.querySelectorAll('.tab .bar').forEach(b=>b.classList.remove('run'))}
+  document.querySelectorAll('.tab,.map .node').forEach(el=>el.addEventListener('click',()=>{stopAuto();select(+el.dataset.a)}));
+  document.querySelector('.tabs').addEventListener('keydown',e=>{
+    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+    stopAuto();const n=(cur+(e.key==='ArrowRight'?1:3))%4;select(n);document.getElementById('tab-'+n).focus();
+  });
+  setLang(saved);select(0,false);
+
+  /* timeline */
+  const steps=document.getElementById('steps'),stepEls=[...steps.querySelectorAll('.step')];
+  function lightSteps(){steps.style.setProperty('--p',1);stepEls.forEach((s,i)=>setTimeout(()=>s.classList.add('lit'),reduce?0:i*600))}
+
+  /* reveal + triggers */
+  const quote=document.getElementById('quote');
+  if(!reduce&&'IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el)}});
+    const once=(el,fn,th=.35)=>{const o=new IntersectionObserver(es=>{if(es[0].isIntersecting){fn();o.disconnect()}},{threshold:th});o.observe(el)};
+    if(steps.getBoundingClientRect().top>innerHeight){steps.style.setProperty('--p',0);once(steps,lightSteps)}else lightSteps();
+    once(quote,()=>quote.classList.add('lit'),.5);
+    once(document.getElementById('axes'),()=>{axesVisible=true;select(cur,false)},.25);
+    document.querySelectorAll('[data-count]').forEach(el=>once(el,()=>{
+      const n=+el.dataset.count;let i=0;const t=setInterval(()=>{el.textContent=++i;if(i>=n)clearInterval(t)},160);el.textContent=0;
+    },.6));
+  }else{lightSteps();quote.classList.add('lit')}
+
+  /* Andes contour lines */
+  const cv=document.getElementById('ridge');
+  function drawRidge(){
+    const dpr=devicePixelRatio||1,w=cv.clientWidth||560,h=Math.round(w*.36);
+    cv.width=w*dpr;cv.height=h*dpr;cv.style.height=h+'px';
+    const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    const acc=css('--accent'),mut=css('--muted');
+    for(let k=0;k<10;k++){
+      c.beginPath();c.strokeStyle=k===0?acc:mut;c.globalAlpha=k===0?1:.12+.05*k;c.lineWidth=k===0?1.6:1;
+      const base=h*(.34+k*.065),amp=h*(.34-k*.026);
+      for(let x=0;x<=w;x+=3){
+        const t=x/w,y=base-amp*(Math.pow(Math.sin(t*Math.PI*1.08+.18),2)*.72+.28*Math.sin(t*21+k*.7)*Math.sin(t*6.3+k));
+        x?c.lineTo(x,y):c.moveTo(x,y);
+      }
+      c.stroke();
+    }
+    c.globalAlpha=1;
+    const px=w*.62,py=h*.86;c.fillStyle=acc;c.beginPath();c.arc(px,py,4,0,7);c.fill();
+    c.strokeStyle=acc;c.globalAlpha=.35;c.beginPath();c.arc(px,py,10,0,7);c.stroke();c.globalAlpha=1;
+    c.font='11px "IBM Plex Mono", monospace';c.fillStyle=css('--ink');c.fillText('SANTIAGO',px+16,py+4);
+  }
+  drawRidge();addEventListener('resize',drawRidge);
+  const mq=matchMedia('(prefers-color-scheme: dark)');mq.addEventListener&&mq.addEventListener('change',()=>{drawRidge();drawField()});
+  new MutationObserver(()=>{drawRidge();drawField()}).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+</body>
+</html>
